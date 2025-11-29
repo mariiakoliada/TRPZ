@@ -9,7 +9,7 @@ public interface TransactionBuilder {
     TransactionBuilder setAmount(BigDecimal amount);
     TransactionBuilder setDescription(String description);
     TransactionBuilder setType(String type);
-    TransactionBuilder setCurrentDate(); // Автоматичне встановлення дати
+    TransactionBuilder setCurrentDate();
 
     Transaction build();
 }
