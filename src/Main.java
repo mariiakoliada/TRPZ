@@ -15,7 +15,7 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             FinanceService service = new FinanceService();
             MainWindow window = new MainWindow(service);
-            window.setVisible(true); // Показуємо Форму 1
+            window.setVisible(true);
         });
     }
 
