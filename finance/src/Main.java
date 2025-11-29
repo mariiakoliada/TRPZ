@@ -1,5 +1,3 @@
-package ia32.koliada.finance;
-
 import ia32.koliada.finance.entity.Account;
 import ia32.koliada.finance.repository.AccountRepository;
 import ia32.koliada.finance.service.FinanceService;
