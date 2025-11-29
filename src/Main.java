@@ -1,18 +1,42 @@
+package ia32.koliada.finance;
+
 import ia32.koliada.finance.entity.Account;
+import ia32.koliada.finance.entity.Transaction;
+import ia32.koliada.finance.report.ConsoleReportStrategy;
+import ia32.koliada.finance.report.CsvReportStrategy;
 import ia32.koliada.finance.repository.AccountRepository;
 import ia32.koliada.finance.service.FinanceService;
+import ia32.koliada.finance.service.ReportService;
 import ia32.koliada.finance.ui.MainWindow;
 
 import javax.swing.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         initMockData();
 
+        FinanceService financeService = new FinanceService();
+
+        financeService.addTransaction(1L, 1L, new BigDecimal("-250.00"), "Спортзал");
+
+        List<Transaction> myTransactions = financeService.getAllTransactions();
+
+        System.out.println("\n=== ПОЧАТОК ТЕСТУВАННЯ ПАТЕРНУ STRATEGY ===");
+
+        ReportService reportService = new ReportService(new ConsoleReportStrategy());
+        reportService.createReport(myTransactions);
+
+        System.out.println("...Користувач змінює налаштування експорту...");
+
+        reportService.setStrategy(new CsvReportStrategy());
+        reportService.createReport(myTransactions);
+
+        System.out.println("=== КІНЕЦЬ ТЕСТУВАННЯ ===");
+
         SwingUtilities.invokeLater(() -> {
-            FinanceService service = new FinanceService();
-            MainWindow window = new MainWindow(service);
+            MainWindow window = new MainWindow(financeService);
             window.setVisible(true);
         });
     }
@@ -21,7 +45,8 @@ public class Main {
         AccountRepository repo = new AccountRepository();
         repo.save(new Account(1L, 100L, "Monobank (White)", new BigDecimal("5000.00")));
         repo.save(new Account(2L, 100L, "Готівка", new BigDecimal("1200.00")));
-        repo.save(new Account(3L, 100L, "Скарбничка", new BigDecimal("10000.00")));
-        System.out.println(">>> Тестові дані завантажено.");
+
+        FinanceService fs = new FinanceService();
+        fs.addTransaction(1L, 1L, new BigDecimal("-60.00"), "Кава");
     }
 }
