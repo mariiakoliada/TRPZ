@@ -1,24 +1,28 @@
 package ia32.koliada.finance;
 
-import ia32.koliada.finance.decorator.*;
+import ia32.koliada.finance.bridge.*;
 import ia32.koliada.finance.entity.Transaction;
+import ia32.koliada.finance.service.FinanceService;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        Transaction tx = new Transaction(1L, 1L, 1L, new BigDecimal("-500.00"), "Подарунок");
+        FinanceService service = new FinanceService();
+        service.addTransaction(1L, 1L, new BigDecimal("-120.00"), "Обід");
+        service.addTransaction(1L, 2L, new BigDecimal("-50.00"), "Проїзд");
+        List<Transaction> data = service.getAllTransactions();
 
-        System.out.println("\n===DECORATOR===");
+        System.out.println("\n=== BRIDGE ===");
 
-        TransactionPrinter simple = new SimpleTransactionPrinter();
-        System.out.println("Simple: " + simple.print(tx));
+        Report textReport = new MonthlyReport(new TextFormat(), data);
+        textReport.buildReport();
 
-        TransactionPrinter html = new HtmlPrinter(simple);
-        System.out.println("HTML:   " + html.print(tx));
+        System.out.println("\n-----------------------------------\n");
 
-        TransactionPrinter secureHtml = new SecurePrinter(new HtmlPrinter(new SimpleTransactionPrinter()));
-        System.out.println("Combo:  " + secureHtml.print(tx));
+        Report pdfReport = new MonthlyReport(new PdfFormat(), data);
+        pdfReport.buildReport();
 
-        System.out.println("====================================\n");
+        System.out.println("=====================================\n");
     }
 }
