@@ -1,28 +1,32 @@
 package ia32.koliada.finance;
 
-import ia32.koliada.finance.bridge.*;
-import ia32.koliada.finance.entity.Transaction;
-import ia32.koliada.finance.service.FinanceService;
+import ia32.koliada.finance.flyweight.CategoryFactory;
+import ia32.koliada.finance.flyweight.TransactionContext;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        FinanceService service = new FinanceService();
-        service.addTransaction(1L, 1L, new BigDecimal("-120.00"), "Обід");
-        service.addTransaction(1L, 2L, new BigDecimal("-50.00"), "Проїзд");
-        List<Transaction> data = service.getAllTransactions();
+        System.out.println("\n=== FLYWEIGHT ===");
 
-        System.out.println("\n=== BRIDGE ===");
+        List<TransactionContext> transactions = new ArrayList<>();
 
-        Report textReport = new MonthlyReport(new TextFormat(), data);
-        textReport.buildReport();
+        transactions.add(new TransactionContext(new BigDecimal("-150"), "Суші", "Їжа", "food.png", "Red"));
+        transactions.add(new TransactionContext(new BigDecimal("-60"), "Кава", "Їжа", "food.png", "Red"));
+        transactions.add(new TransactionContext(new BigDecimal("-200"), "Піца", "Їжа", "food.png", "Red"));
 
-        System.out.println("\n-----------------------------------\n");
+        transactions.add(new TransactionContext(new BigDecimal("-8"), "Метро", "Транспорт", "bus.png", "Blue"));
+        transactions.add(new TransactionContext(new BigDecimal("-150"), "Таксі", "Транспорт", "bus.png", "Blue"));
 
-        Report pdfReport = new MonthlyReport(new PdfFormat(), data);
-        pdfReport.buildReport();
+        System.out.println("\n--- Вивід списку транзакцій ---");
+        for (TransactionContext tx : transactions) {
+            tx.showDetails();
+        }
 
+        System.out.println("\n-------------------------------------");
+        System.out.println("Всього транзакцій створено: " + transactions.size());
+        System.out.println("Кількість об'єктів категорій у пам'яті: " + CategoryFactory.getCacheSize());
         System.out.println("=====================================\n");
     }
 }
