@@ -1,0 +1,12 @@
+package ia32.koliada.finance.soa.server;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class FinanceServerApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(FinanceServerApplication.class, args);
+        System.out.println(">>> SERVER STARTED ON PORT 8080 <<<");
+    }
+}
